@@ -1,0 +1,26 @@
+Reflection
+
+Design decision. I put the AgentCore browser behind a lazily initialized @tool wrapper that delegates to the real browser at call time. The heavy strands_tools.browser import stays off the cold-start path, so order, knowledge-base and loyalty requests never pay for it. The wrapper also gave me one place to add logging, input repair and error handling. I kept the same principle across the agent: each capability has one clear tool (Gateway for live orders, the knowledge base for policy, Code Interpreter for exact arithmetic). The system prompt routes between them, and a degraded fallback is labelled honestly rather than hidden.
+
+Challenge. Browsing failed, and the first symptom was misleading: the model apologized that the browser was "unavailable". The cause turned out to be several stacked problems. The original wrapper returned the tool object instead of executing it. The model was ignoring the tool or sending malformed input. The prompt and docstring taught it an invalid session name, "main", which was too short. The runtime role also lacked the browser stream permissions. I solved it by making each layer observable before guessing:
+
+Logging: file logging, a tool-call hook, and before/after logs with a heartbeat around the browser call.
+Isolated test: a --check-browser command that runs without the agent.
+Fixes: valid session-name rules in the prompt and examples, a code-level sanitizer as a safety net, and the full set of AgentCore Browser IAM actions from the AWS docs.
+
+Production extensions.
+
+Security:
+Least-privilege IAM, with Gateway authentication added (the current client sends no auth header).
+REQUIRE_GATEWAY=true, so an outage can't silently remove order and refund tools.
+A browsing domain allow-list and prompt-injection defenses for untrusted page content.
+
+Reliability and operations:
+Session timeouts and cleanup.
+Retries with backoff, and configuration and secrets managed outside the code.
+Structured logs, metrics and alarms in CloudWatch instead of /tmp files.
+
+Quality:
+An evaluation set covering routing, refund confirmation, memory conflicts and browser failures.
+A comparison of models, since a stronger model may call complex tool schemas more reliably.
+A review of what is written to long-term memory, since it can hold personal data.
