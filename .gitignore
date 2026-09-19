@@ -1,0 +1,6 @@
+
+**/.bedrock_agentcore/**/dependencies.zip
+*.zip
+.venv/
+__pycache__/
+.DS_Store
