@@ -165,7 +165,7 @@ click Deploy API
 create a new stage named prod
 deploy
 Save the values you’ll need later:
-REST API ID: visible in the API details or URL -----------------> 42egnxr4xk
+REST API ID: visible in the API details or URL -----------------> 3fls11t2n6
 stage name: prod
 You can keep a note in your terminal like:
 
@@ -419,30 +419,6 @@ agentcore invoke '{"prompt": "Go to https://www.amazon.com and tell me the page 
 - [uv Package Manager](https://docs.astral.sh/uv/)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-While completing the Knowledge Base setup for the AI Support Agent project, I was blocked by an AWS sandbox permission issue in the provided Udacity environment.
-
-At the step where I created the Bedrock Knowledge Base with an Amazon OpenSearch Serverless vector store, the setup failed with this error:
-
-“Failed to create the Amazon OpenSearch Serverless collection. User: arn:aws:sts::627764425123:assumed-role/voclabs/user2316192=6937b8ea-3907-11ed-92f9-1727bc38c9f3 is not authorized to perform: aoss:CreateSecurityPolicy on resource: aoss:collection/bedrock-knowledge-base-2kiyh2 because no identity-based policy allows the aoss:CreateSecurityPolicy action.”
-
-This appears to be an IAM restriction in the provided sandbox account rather than an issue I can resolve from my side. I’m including this note to explain why I could not complete that infrastructure step as instructed.
 
 
  KNOWLEDGE BASE / RAG
