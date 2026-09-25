@@ -50,6 +50,7 @@ from mcp.client.streamable_http import streamable_http_client
 from bedrock_agentcore.runtime import BedrockAgentCoreApp
 from bedrock_agentcore.memory import MemoryClient
 from bedrock_agentcore.tools.code_interpreter_client import code_session
+from strands_tools.browser import AgentCoreBrowser 
 
 # Tool-call hook events (names can differ between strands versions, so guard the import).
 try:
@@ -1128,12 +1129,10 @@ async def invoke(payload, context=None):
             memory_id=MEMORY_ID,
         )
 
-        tools = [calculate_loyalty_discount, _browser_tool_for_agent()]
+        agent_core_browser = AgentCoreBrowser(region=REGION)
+        tools = [search_knowledge_base, calculate_loyalty_discount, agent_core_browser.browser]
 
-        if KB_ID:
-            tools.insert(0, search_knowledge_base)
-        else:
-            logger.warning("KB_ID not set - search_knowledge_base NOT exposed to the agent")
+
 
         logger.info("[timing] local setup done at %.2fs", time.perf_counter() - t_start)
 
