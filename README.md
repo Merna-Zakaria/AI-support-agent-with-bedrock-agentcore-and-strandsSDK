@@ -427,3 +427,12 @@ You have access to `search_knowledge_base`.
 TOOL SELECTION
 - Orders/account/refunds → AgentCore Gateway
 - Product/policy/company documentation → `search_knowledge_base`
+
+
+
+It should include:
+tool name
+target/tool used
+input payload
+non-error response payload
+final answer
